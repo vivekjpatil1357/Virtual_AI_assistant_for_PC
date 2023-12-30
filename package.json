@@ -1,0 +1,14 @@
+{
+  "name": "jarvis",
+  "version": "1.0.0",
+  "description": "this is projct based on personal ai assistant for PC like alexa,siri",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vivek patil",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^28.1.0"
+  }
+}

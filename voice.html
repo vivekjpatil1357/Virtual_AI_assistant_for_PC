@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>voice</title>
+</head>
+<body>
+    <input id="cb" type="button" value="Start Voice chat">
+    <p id="already"></p>
+</body>
+    <script>var ch=document.getElementById("cb")
+        ch.onclick=()=>{
+            // document.write("i am sending voiceSend")
+          window.jarvis.voiceSend()
+        }</script>
+    <script src="./renderer.js"></script>
+</html>
