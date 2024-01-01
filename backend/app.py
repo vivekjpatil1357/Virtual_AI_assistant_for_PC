@@ -3,7 +3,6 @@ import internal as I
 import external as E
 import keyboard
 import builtins
-
 app = Flask(__name__)
 
 @app.route("/say", methods=["POST"])

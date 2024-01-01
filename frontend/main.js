@@ -6,8 +6,8 @@ const { get } = require('http')
 // var mainWindow;
 function createHomeWindow() {
   mainWindow = new BrowserWindow({
-    width: 1440,
-    height: 845,
+    width: 1150,
+    height: 665,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -17,8 +17,8 @@ function createHomeWindow() {
 }
 function createChoiceWindow() {
   choiceWindow = new BrowserWindow({
-    width: 1440,
-    height: 845,
+    width: 1150,
+    height: 665,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -28,8 +28,8 @@ function createChoiceWindow() {
 }
 function createVoiceWindow() {
   voiceWindow = new BrowserWindow({
-    width: 1440,
-    height: 845,
+    width: 1150,
+    height: 665,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -39,12 +39,9 @@ function createVoiceWindow() {
   voiceWindow.loadFile('voice.html')
 }
 
-
 // ###################################################################################################
 // Windows ^ above
 // ###################################################################################################
-
-
 
 async function requestSay(data) {
   console.log("going to say :" + data)
@@ -60,7 +57,6 @@ async function requestSay(data) {
       console.log(data['h'])
       fetchData()
     }).catch(error => {
-
       console.log(error);
     });
 }
@@ -123,6 +119,7 @@ ipcMain.on('start', () => {
 ipcMain.on('voice', async (e) => {
   await fetchData()
 })
+
 app.whenReady().then(() => {
   createHomeWindow()
   app.on('activate', function () {
