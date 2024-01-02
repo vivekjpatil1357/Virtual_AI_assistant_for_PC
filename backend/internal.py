@@ -1,21 +1,35 @@
-import os
-import webbrowser
 import datetime
-import openai
 import pythoncom
-
-
-# from playsound import playsound
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import speech_recognition as sr
 import win32com.client
 import pyautogui as p
 from plyer import notification
 from config import apikey
 import time
+import screen_brightness_control as sbc
 import external as E
+import winsound
 import AppOpener as a
 from app import app
 # from main import say
+
+def adjustBrightness(value):
+    sbc.set_brightness(value)
+    
+
+def playSound():
+    winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
+
+def adjustVolume(volume_level):
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    volume.SetMasterVolumeLevelScalar(volume_level/100, None)
+    playSound()
+    
 def say(text):
     pythoncom.CoInitialize()    
     try:
@@ -26,25 +40,6 @@ def say(text):
     finally:
         # Uninitialize COM when done
         pythoncom.CoUninitialize()
-
-
-def chat(query):
-    # print(chatStr)
-    openai.api_key = apikey
-    chatStr += f"Vivek: {query}\n computer:"
-    try:
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=chatStr,
-            temperature=0.7,
-            max_tokens=1000,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-        )
-        say(response["choices"][0]["text"])
-    except:
-        say("sorry? say that again")
 
 
 def isExit(query):  # if exit terminate exe.

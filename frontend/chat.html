@@ -9,6 +9,7 @@
         body {
             background-color: #f0f4f8;
             display: flex;
+            overflow: hidden;
             align-items: center;
             justify-content: center;
             height: 100vh;
@@ -29,7 +30,7 @@
         }
 
         #message-list {
-            height: 500px;
+            height: 460px;
             scroll-behavior: smooth;
             overflow-y: auto;
             margin-bottom: 20px;
@@ -41,7 +42,7 @@
         }
 
         #message-list::-webkit-scrollbar {
-            width: 5px;
+            width: 0px;
             /* Adjust the width as needed */
         }
 
@@ -83,27 +84,42 @@
             background-color: #2980b9;
         }
 
+        .bot strong,.user strong {
+            align-self: flex-start;
+            color: #ffffffc4;
+        }
+
+        .bot p ,.user p {
+            text-align: start;
+            margin: 0px;
+
+        }
+
         .bot {
+            display: flex;
+            flex-direction: column;
             background: rgb(4 4 4);
-            max-width: 350px;
+            max-width: 280px;
             color: white;
             border-radius: 12px 0px 12px 12px;
             /* max-height: 100px; */
             align-self: flex-end;
+            font-size: 16px;
+            font-weight: 400;
             margin-top: 8px;
-            margin: 7px 5px 7px 1px;
+            margin: 0px 5px 4px 1px;
             padding: 8px 8px 8px 8px;
         }
 
         .user {
             background: rgb(4 4 4);
-            max-width: 350px;
+            max-width: 280px;
             color: white;
             border-radius: 0px 12px 12px 12px;
             /* max-height: 100px; */
             /* align-self: end; */
             margin-top: 8px;
-            margin: 3px 7px 0px 0px;
+            margin: 0px 7px 4px 0px;
             padding: 8px 8px 8px 8px;
 
         }
@@ -132,39 +148,35 @@
 
         <div style="display: flex; ">
 
-            <input type="text" id="user-input" placeholder="Type here..." onkeyup="handleKeyPress(event)">
+            <input type="textarea" id="user-input" placeholder="Type here..." onkeyup="handleKeyPress(event)">
             <button id="send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
-
+    
+    <script src="renderer.js"></script>
     <script>
         function sendMessage() {
             var userInput = document.getElementById('user-input').value;
             if (userInput.trim() !== '') {
-                addMessage('You', userInput);
+                addMessage('Vivek', userInput);
                 document.getElementById('user-input').value = '';
-                setTimeout(function () {
-                    addMessage('Bot', 'Helloadjfasdkfadskfkladj dfadjflkadfkasdjfad adlskkfjakdlfjad akfjad');
-                    scrollToBottom();
-                }, 500);
+            scrollToBottom();
+                res(userInput)
             }
+        }
+        function res(query){
+            window.chat.sendUserChat(query);
+            scrollToBottom();
         }
 
         function addMessage(sender, message) {
             var messageList = document.getElementById('message-list');
             var newMessage = document.createElement('div');
-            if (sender == 'Bot') {
-                newMessage.className = "bot"
-                newMessage.align = 'right'
-            }
-            else {
                 newMessage.className = "user"
                 newMessage.style = "align-self:start;"
-
                 newMessage.align = 'left'
-            }
-
-            newMessage.innerHTML = '<strong>' + sender + ':</strong> ' + message;
+            newMessage.innerHTML = '<strong>' + sender + ':</strong><p> ' + message + '</p>';
+            if(message.trim()!='')
             messageList.appendChild(newMessage);
             scrollToBottom()
         }
@@ -180,7 +192,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>

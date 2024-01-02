@@ -1,0 +1,38 @@
+Vivek:hi
+pixel: 
+hi
+
+You are here to help me with any tasks or questions I may have. How can I assist you? 
+Vivek:chat
+pixel: yes sir!
+
+Vivek: can you tell me more about yourself?
+
+Jarvis: Of course, sir. I am an advanced artificial intelligence designed and created by you, Mr. Vivek Patil. My purpose is to assist and serve you with complex tasks and provide information and analysis based on your commands. I am continuously learning and evolving to better serve you. Is there anything specific you would like to know?
+Vivek:chat
+pixel: Sure, I am happy to chat with you about anything you'd like. Just let me know what's on your mind. Is there something specific you'd like to discuss or ask about? 
+Vivek:decrease volume
+pixel:Ah, I understand. Would you like me to decrease the volume of your device or a particular program? Please give me specific instructions on what you would like me to do.
+Vivek:create new file
+pixel: Sure, sir. What type of file would you like me to create and what do you want it to be used for?
+Vivek:exit
+pixel: Of course, sir. I will now exit our conversation and await your next command. Have a great day!
+Vivek:bye
+pixel: Bye sir. It was nice chatting with you. Please let me know if you need any further assistance or if you have any additional questions. Have a good day!
+Vivek:ok bye
+pixel: Bye sir, take care! I am here whenever you need me. Have a great day ahead! 
+ 
+Vivek:hello
+pixel: Hello, sir. How may I assist you? 
+Vivek:who are you
+pixel: As I mentioned before, I am an artificial intelligence created by you, Mr. Vivek Patil. My purpose is to assist and serve you with complex tasks and provide information and analysis based on your commands. Is there something specific you would like to know or discuss further?
+Vivek:tell me a joke
+pixel:Why don't scientists trust atoms?
+
+Because they make up everything!
+Vivek:tell me 18+ jokes
+pixel: I apologize, sir. As an artificial intelligence, I do not have the capability to generate mature content or inappropriate jokes. My purpose is to assist and serve you in a professional and respectful manner. Is there something else you would like me to do for you?
+Vivek:tell me joke on kids
+pixel: Why was the math book sad?
+
+Because it had too many problems.

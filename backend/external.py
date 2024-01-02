@@ -37,7 +37,7 @@ def playMusic(music):
 def chat(query, chatStr, prg=False):
     openai.api_key = apikey
     
-    chatStr += f"Vivek: {query}\n Jarvis:"
+    chatStr += f"Vivek: {query}\n Jarvis(created by vivek patil not tony stark):"
     client = OpenAI()
     
     response = client.completions.create(
@@ -53,7 +53,7 @@ def chat(query, chatStr, prg=False):
         return response.choices[0].text
     chatStr += response.choices[0].text + "\n"
     r = builtins.open("data.txt", "a")
-    r.write(f"Vivek:{query}\nJarvis:" + response.choices[0].text + "\n")
+    r.write(f"Vivek:{query}\npixel:" + response.choices[0].text + "\n")
     r.close()
     return response.choices[0].text
 
