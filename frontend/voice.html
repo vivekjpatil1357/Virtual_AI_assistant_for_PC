@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>voice</title>
 </head>
+
 <body>
-    <input id="cb" type="button" value="Start Voice chat">
+    <input id="start" type="button" onclick="start()" value="Start Voice chat">
+    <input id="stop" type="button" onclick="window.pixel.stop()"  disabled  value="Stop">
     <p id="already"></p>
 </body>
-    <script>var ch=document.getElementById("cb")
-        ch.onclick=()=>{
-            // document.write("i am sending voiceSend")
-          window.pixel.voiceSend()
-        }</script>
-    <script src="./renderer.js"></script>
+<script>
+    function start(){
+        document.getElementById('stop').disabled=false
+        window.pixel.voiceSend()
+    }
+</script>
+<script src="./renderer.js"></script>
 </html>

@@ -56,6 +56,7 @@ def timer(t):
     notification.notify(
         title="Time Over", message=f"Timer for {t} seconds is over!!", timeout=3
     )
+    
     # waiting time
     return ("Time over sir")
 
@@ -85,6 +86,7 @@ def openApp(query):
     try:
         a.open(query[5:], match_closest=True, throw_error=True)
         say(f"opening {query[5:]} sir")
+        return "opening app sir!!!!"
     except:
         if E.openSites(query):
             return
@@ -124,6 +126,7 @@ def vscodeOpened():
 def closeApp(query):
     say(f"closing {query[6:-4]} sir")
     a.close(query[6:-4].lower(), match_closest=True)
+    return "closing app sir"
 
 
 def sayTime():

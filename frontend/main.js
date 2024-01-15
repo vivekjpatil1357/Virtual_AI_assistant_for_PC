@@ -31,9 +31,9 @@ function createVoiceWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
+    // alwaysOnTop: true,
     autoHideMenuBar: true
   })
-
   voiceWindow.loadFile('voice.html')
 }
 function createChatWindow() {
@@ -46,8 +46,8 @@ function createChatWindow() {
       preload: path.join(__dirname, 'preload.js')
     },
     autoHideMenuBar: true,
-    resizable: false
-    // alwaysOnTop:true
+    // resizable: false
+    alwaysOnTop:true
   })
 
   chatWindow.loadFile('chat.html')
@@ -57,8 +57,13 @@ function createChatWindow() {
 // Windows ^ above
 // ###################################################################################################
 
-async function requestSay(data) { //pass text, will speak and call fetchVoiceData
+async function requestSay(data, tosend) {           //pass text, will speak and call fetchVoiceData
   console.log("going to say :" + data)
+  if (tosend) {
+    voiceWindow.webContents.send('pixel', {
+      'pixel': data
+    })
+  }
   var dataToSend = { 'text': data, }
   await fetch('http://127.0.0.1:1000/say', {
     method: 'POST',
@@ -74,7 +79,7 @@ async function requestSay(data) { //pass text, will speak and call fetchVoiceDat
       console.log(error);
     });
 }
-async function fetchResponse(data, isvoice) {      //pass query and bool for if it is for voice or chat, will search in AI for result
+async function fetchResponse(data, isvoice) {  //pass query and bool for if it is for voice or chat, will search in AI for result
   console.log("fetch response called")
   var dataToSend = { 'query': data, }
   await fetch('http://127.0.0.1:1000/ai', {
@@ -90,19 +95,24 @@ async function fetchResponse(data, isvoice) {      //pass query and bool for if 
         voiceWindow.webContents.send('pixel', {
           'pixel': data['response']
         })
-        requestSay(data['response'])
+        requestSay(data['response'], false)
       }
       else {
+
         console.log("sending to Frontend")
+        // console.log(data['response'].indexOf("the report of "))
+
+        // else {
         chatWindow.webContents.send('response', {
-          'pixel': data['response']
+          'pixel': data['response'],
+
         })
+        // }
       }
     }).catch(error => {
       console.log(error);
     });
 }
-
 async function fetchVoiceData() {   //will cause to call mainLogic for voice module
   console.log("fetching new data")
   var res = await fetch('http://127.0.0.1:1000/start/voice'
@@ -115,7 +125,7 @@ async function fetchVoiceData() {   //will cause to call mainLogic for voice mod
       if (data['isExit'] == "No") {
         console.log(data['query'])
         callTofetchResponse = async () => await fetchResponse(data['query'], true)
-        callTorequestSay = async () => await requestSay(data['response'])
+        callTorequestSay = async () => await requestSay(data['response'], true)
         if (data['isAi'] == 'yes')
           callTofetchResponse()
         else
@@ -126,7 +136,7 @@ async function fetchVoiceData() {   //will cause to call mainLogic for voice mod
       console.error('Fetch error:', error.message);
     });
 }
-async function fetchChatData(text) { ////will cause to call mainLogic for chat module
+async function fetchChatData(text) { //will cause to call mainLogic for chat module
   console.log("fetching chat new data")
   dataToSend = { 'text': text };
   var res = await fetch('http://127.0.0.1:1000/start/chat',
@@ -147,9 +157,19 @@ async function fetchChatData(text) { ////will cause to call mainLogic for chat m
         callTofetchResponse()
       else {
         console.log("sending to Frontend")
-        chatWindow.webContents.send('response', {
-          'pixel': data['response']
-        })
+        if (data['response'].indexOf("the report of ") == 0) {
+          chatWindow.webContents.send('response', {
+            'pixel': data['response'],
+            'isNews': 'yes',
+            'imageUrl': data['imageUrl']
+          })
+        }
+        else {
+          chatWindow.webContents.send('response', {
+            'pixel': data['response'],
+            'isNews': 'no',
+          })
+        }
       }
 
       // callTorequestSay()
@@ -170,6 +190,24 @@ ipcMain.on('choiceVoice', () => { // in choice when choosed as Voice,will open v
 ipcMain.on('choiceChat', () => {  // in choice when choosed as Chat will open chat page
   createChatWindow()
   choiceWindow.close()
+})
+ipcMain.on('stop',()=>{
+  fetch('http://127.0.0.1:1000/stop')
+  .catch((e)=>{
+
+  })
+  const { spawn } = require('child_process');
+  console.log("stop processss!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  
+  const pythonProcess = spawn('python',['C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\app.py'], {
+    shell:true,
+    detached: true,
+    stdio: 'ignore',
+  });
+  // voiceWindow.focus();
+
+
+
 })
 ipcMain.on('choiceRoleplay', () => {    // in choice when choosed as Roleplay, will open Roleplay page
   createRolePlayWindow()
@@ -196,7 +234,6 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
 // ###################################################################################################
 // ON commands (Event Handling) ^ above
 // ###################################################################################################
