@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="role">
+    <button onclick="sendRole()">Select Role</button>
+
+
+</body>
+<script>
+    function sendRole(){
+        var role=document.getElementById('role').value
+        window.rolePlay.sendRole(role)
+    }
+</script>
+</html>

@@ -5,9 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>voice</title>
+    <style>
+        
+        .arrow:hover {
+            cursor: pointer;
+        }
+        .arrow {
+            background: rgba(172, 14, 14, 0.635);
+            border: white;
+            border-radius: 30px 0px 0px 30px;
+            width: 45px;
+            height: 26px;
+        }
+
+        .arrow:active {
+            background-color: rgb(158, 234, 255);
+            transform: scale(0.8);
+        }
+    </style>
 </head>
 
 <body>
+    <input type="button" value="Back" class="arrow" id="back" onclick="back()">
     <input id="start" type="button" onclick="start()" value="Start Voice chat">
     <input id="stop" type="button" onclick="window.pixel.stop()"  disabled  value="Stop">
     <p id="already"></p>
@@ -16,6 +35,9 @@
     function start(){
         document.getElementById('stop').disabled=false
         window.pixel.voiceSend()
+    }
+    function back(){
+        window.pixel.backFromVoice()
     }
 </script>
 <script src="./renderer.js"></script>

@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Chat Window</title>
     <style>
         body {
@@ -161,14 +159,14 @@
             transform: scale(0.8);
         }
     </style>
-
+    
 </head>
 
-<body>
+<body >
     <div class="contain">
         <input type="button" value="Back" class="arrow" id="back" onclick="back()">
         <div class="header">
-            <h1 class="head">Chat</h1>
+            <h1 class="head" id="head">Chat With </h1>
         </div>
 
         <hr>
@@ -185,31 +183,6 @@
     <script>
         function back() {
             window.chat.backFromChat();
-        }
-        function sendMessage() {
-            var userInput = document.getElementById('user-input').value;
-            if (userInput.trim() !== '') {
-                addMessage('Vivek', userInput);
-                document.getElementById('user-input').value = '';
-                scrollToBottom();
-                res(userInput)
-            }
-        }
-        function res(query) {
-            window.chat.sendUserChat(query);
-            scrollToBottom();
-        }
-
-        function addMessage(sender, message) {
-            var messageList = document.getElementById('message-list');
-            var newMessage = document.createElement('div');
-            newMessage.className = "user"
-            newMessage.style = "align-self:start;"
-            newMessage.align = 'left'
-            newMessage.innerHTML = '<strong>' + sender + ':</strong><p> ' + message + '</p>';
-            if (message.trim() != '')
-                messageList.appendChild(newMessage);
-            scrollToBottom()
         }
 
         function scrollToBottom() {

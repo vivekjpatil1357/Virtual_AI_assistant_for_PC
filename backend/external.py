@@ -31,7 +31,6 @@ def news(query):
             + data["articles"][x]["description"],
             "imageUrl": data["articles"][x]["urlToImage"],
         }
-
     else:
         return {"response": ("there is some problem in fetching info from Api",)}
 
@@ -60,10 +59,19 @@ def playMusic(music):
 
 def chat(query, chatStr, prg=False):
     openai.api_key = apikey
-
-    chatStr += f"Vivek: {query}\n pixel(an virtual assistant made by vivek):"
+    chatStr += f"Vivek: {query}\n pixel(an virtual assistant made by vivek ):"
     client = OpenAI()
-
+    if prg == True:
+        response = client.completions.create(
+            model="gpt-3.5-turbo-instruct-0914",
+            prompt=query,
+            temperature=1,
+            max_tokens=1000,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+        )
+        return response.choices[0].text
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct-0914",
         prompt=chatStr,
@@ -73,10 +81,11 @@ def chat(query, chatStr, prg=False):
         frequency_penalty=0,
         presence_penalty=0,
     )
-    if prg == True:
-        return response.choices[0].text
+
     chatStr += response.choices[0].text + "\n"
-    r = builtins.open("data.txt", "a")
+    r = builtins.open(
+        "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "a"
+    )
     r.write(f"Vivek:{query}\npixel:" + response.choices[0].text + "\n")
     r.close()
     return response.choices[0].text
@@ -101,7 +110,6 @@ def searchFor(query):
 def youtube(address):
     I.say(f"opening youtube sir..")
     webbrowser.open(address)
-
     I.say("tell me what are you searching for ")
     search = I.takecommand()
     I.say(f"searching for {search}")

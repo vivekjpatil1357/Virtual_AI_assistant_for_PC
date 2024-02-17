@@ -9,7 +9,6 @@ function createHomeWindow() {
       preload: path.join(__dirname, 'preload.js')
     },
     autoHideMenuBar: true,
-
   })
   mainWindow.loadFile('index.html')
 }
@@ -47,10 +46,41 @@ function createChatWindow() {
     },
     autoHideMenuBar: true,
     // resizable: false
-    alwaysOnTop:true
+    alwaysOnTop: true
   })
 
   chatWindow.loadFile('chat.html')
+}
+function createRolePlayWindow() {
+  rolePlayWindow = new BrowserWindow({
+    width: 445,
+    height: 710,
+    x: 1050,
+    y: 5,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    },
+    autoHideMenuBar: true,
+    // resizable: false
+    alwaysOnTop: false
+  })
+
+  rolePlayWindow.loadFile('roleplay.html')
+}
+function createInputRolePlayWindow() {
+  inputRolePlayWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    x: 1050,
+    y: 5,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    },
+    autoHideMenuBar: true,
+  })
+  createRolePlayWindow()
+  inputRolePlayWindow.loadFile('input_role.html')
+  inputRolePlayWindow.focus()
 }
 
 // ###################################################################################################
@@ -134,7 +164,7 @@ async function fetchVoiceData() {   //will cause to call mainLogic for voice mod
       }
     }).catch(error => {
       console.error('Fetch error:', error.message);
-    });
+   });
 }
 async function fetchChatData(text) { //will cause to call mainLogic for chat module
   console.log("fetching chat new data")
@@ -191,39 +221,63 @@ ipcMain.on('choiceChat', () => {  // in choice when choosed as Chat will open ch
   createChatWindow()
   choiceWindow.close()
 })
-ipcMain.on('stop',()=>{
+ipcMain.on('stop', () => {
   fetch('http://127.0.0.1:1000/stop')
-  .catch((e)=>{
-
+  .catch((e) => {
+    
   })
   const { spawn } = require('child_process');
   console.log("stop processss!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
   
-  const pythonProcess = spawn('python',['C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\app.py'], {
-    shell:true,
+  const pythonProcess = spawn('python', ['C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\app.py'], {
+    shell: false,
     detached: true,
     stdio: 'ignore',
   });
   // voiceWindow.focus();
-
-
-
+  
+  
+  
 })
-ipcMain.on('choiceRoleplay', () => {    // in choice when choosed as Roleplay, will open Roleplay page
-  createRolePlayWindow()
+ipcMain.on('choiceRolePlay', () => {    // in choice when choosed as Roleplay, will open Roleplay page
+  console.log('role play choosed')
+  createInputRolePlayWindow()
   choiceWindow.close()
+})
+
+ipcMain.on('sendRole', (e, data) => {  
+  inputRolePlayWindow.close()
+  console.log(data)
+  rolePlayWindow.webContents.send('receiveRole', {
+    'role': data
+  })
 })
 ipcMain.on('start', () => {       // when clicked on start on first page, it will redirect to second page
   console.log('from main start')
   createChoiceWindow();
   mainWindow.close();
-
+  
 })
 ipcMain.on('voice', async (e) => {  //after choosing voice in choice , when "start voice chat" button clicked it will open Mic
   await fetchVoiceData()
 })
 ipcMain.on('userChat', async (e, data) => {      //after choosing chat in choice ,  it will open ChatBox
   await fetchChatData(data);
+})
+ipcMain.on('backFromChat', () => {
+  console.log("back from chat")
+  createChoiceWindow()
+  chatWindow.close()
+})
+ipcMain.on('backFromVoice', () => {
+  console.log("back from voice")
+  createChoiceWindow()
+  voiceWindow.close()
+})
+ipcMain.on('backFromChoice', () => {
+  console.log("back from Choice")
+  createHomeWindow()
+  choiceWindow.close()
 })
 app.whenReady().then(() => {
   createHomeWindow()
