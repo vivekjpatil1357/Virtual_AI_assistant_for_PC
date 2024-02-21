@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background-color: #000000;
+            background-color: #f0f4f8;
             display: flex;
             overflow: hidden;
             align-items: center;
@@ -51,6 +51,26 @@
             background-color: #6a8886;
             /* Cuscotomize the color of the scrollbar thumb */
         }
+
+        /* 
+        #user-input {
+            width: calc(100% - 16px);
+            padding: 12px;
+            border: 6px double rgb(0, 0, 0);
+            border-radius: 23px;
+            outline: none;
+            margin-right: 11px;
+            box-sizing: border-box;
+            font-size: 16px;
+            /* font-weight: bold; */
+
+        /* } */
+        /* 
+        #user-input:hover {
+            transition: all 0.1s;
+            box-shadow: 0px 0px 16px 11px rgba(0, 0, 0, 0.1);
+
+        } */
 /* 
         #send-button {
             padding: 10px;
@@ -65,7 +85,7 @@
         #send-button:hover {
          cursor: pointer;
         }
-
+        
         .bot strong,
         .user strong {
             align-self: flex-start;
@@ -85,9 +105,9 @@
             background: rgb(4 4 4);
             max-width: 280px;
             color: white;
-            border-radius: 0px 12px 12px 12px;
+            border-radius: 12px 0px 12px 12px;
             /* max-height: 100px; */
-            align-self: flex-start;
+            /* align-self: flex-end; */
             font-size: 16px;
             font-weight: 400;
             margin-top: 8px;
@@ -99,7 +119,7 @@
             background: rgb(4 4 4);
             max-width: 280px;
             color: white;
-            border-radius: 12px 0px 12px 12px;
+            border-radius: 0px 12px 12px 12px;
             /* max-height: 100px; */
             align-self: end;
             margin-top: 8px;
@@ -133,7 +153,8 @@
         .arrow:hover {
             cursor: pointer;
         }
-        .header{
+
+        .header {
             display: flex;
             justify-content: center;
         }
@@ -158,9 +179,9 @@
 
         <div style="display: flex; ">
             <div class="form__group field">
-                <input type="input" class="form__field" placeholder="Type here..." name="name"  onkeyup="handleKeyPress(event)" id='user-input'
+                <input type="input" class="form__field" placeholder="Type here..." name="name" id='user-input'
                     required />
-                <label for="name" class="form__label">Chat</label>
+                <label for="name" class="form__label">Name</label>
             </div>
             <!-- <input type="textarea" id="user-input" placeholder="Type here..." onkeyup="handleKeyPress(event)"> -->
             <img src="icons8-send-button-60.png" id="send-button" onclick="sendMessage()" width="45px" height="45px" >
@@ -173,7 +194,7 @@
         function back() {
             window.chat.backFromChat();
         }
-        
+
         function sendMessage() {
             var userInput = document.getElementById('user-input').value;
             if (userInput.trim() !== '') {

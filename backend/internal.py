@@ -19,21 +19,34 @@ import pyperclip
 # from main import say
 
 
-def adjustBrightness(value):
-    sbc.set_brightness(value)
-
-
 def playSound():
     winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
 
+def adjustBrightness(value):
+    value=sbc.get_brightness()[0]+value
+    sbc.set_brightness(value)
+    
+    return f"set to {value}"
 
 def adjustVolume(volume_level):
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    volume.SetMasterVolumeLevelScalar(volume_level / 100, None)
-    playSound()
-
+    pythoncom.CoInitialize()
+    current_volume=0
+    try:
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+        current_volume = int(volume.GetMasterVolumeLevelScalar()*100)
+        # print(current_volume*100)
+        volume.SetMasterVolumeLevelScalar((current_volume+volume_level)/100, None)
+        playSound()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Uninitialize COM when done
+        pythoncom.CoUninitialize()
+    
+    return f"set to {current_volume}"
+    
 
 def say(text):
     pythoncom.CoInitialize()
@@ -71,7 +84,6 @@ def takecommand():
     with sr.Microphone() as source:
         r.pause_threshold = 0.5
         audio = r.listen(source)
-
         try:
             print("recognizing....")
             query = r.recognize_google(audio, language="en-in")
@@ -197,6 +209,7 @@ def newFile(query, langs, source):
             p.press("f2")  # rename to
             with p.hold("ctrl"):
                 p.press("right", presses=2)
+            time.sleep(3)
             with p.hold("ctrl"):
                 p.keyDown("shift")
                 p.press("left", presses=5)

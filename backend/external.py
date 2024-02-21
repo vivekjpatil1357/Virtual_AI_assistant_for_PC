@@ -4,13 +4,82 @@ import webbrowser
 import openai
 from openai import OpenAI
 import speech_recognition as sr
-import win32com.client
 import pyautogui as p
 from config import apikey
 import requests
+import config as c
 import internal as I
+import google.generativeai as genai
+
 import builtins
 import random
+# def roleplay(query,role,desc,chatStr):
+#     genai.configure(api_key=c.apikeyGoogle)
+#     chatStr += f"Vivek: {query}\n {role}({desc}):"
+#     generation_config = {
+#   "temperature": 0.9,
+#   "top_p": 1,
+#   "top_k": 1,
+#   "max_output_tokens": 2048,
+# }
+#     safety_settings = [
+#   {
+#     "category": "HARM_CATEGORY_HARASSMENT",
+#     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+#   },
+#   {
+#     "category": "HARM_CATEGORY_HATE_SPEECH",
+#     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+#   },
+#   {
+#     "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+#     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+#   },
+#   {
+#     "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+#     "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+#   },
+# ]
+#     model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+#                               generation_config=generation_config,
+#                               safety_settings=safety_settings)
+#     convo = model.start_chat(history=[
+# ])
+    
+#     convo.send_message(chatStr)
+#     chatStr += convo.last.text + "\n"
+#     r = builtins.open(
+#         c.roleplay, "a"
+#     )
+#     r.write(f"Vivek:{query}\n" +role+":"+ convo.last.text + "\n")
+#     r.close()
+#     print(convo.last.text)
+    
+#     print('from gemini')
+#     return convo.last.text
+def roleplay(query,role,desc,chatStr):
+    openai.api_key = apikey
+    chatStr += f"Vivek: {query}\n {role}({desc}):"
+    client = OpenAI()
+   
+    response = client.completions.create(
+        model="gpt-3.5-turbo-instruct-0914",
+        prompt=chatStr,
+        temperature=1,
+        max_tokens=1256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+    )
+
+    chatStr += response.choices[0].text + "\n"
+    r = builtins.open(
+        c.roleplay, "a"
+    )
+    r.write(f"Vivek:{query}\n" +role+":"+ response.choices[0].text + "\n")
+    r.close()
+    return response.choices[0].text
+
 
 
 def news(query):
@@ -27,7 +96,7 @@ def news(query):
         return {
             "response": "the report of "
             + data["articles"][x]["source"]["name"]
-            + " says ,"
+            + " says, "
             + data["articles"][x]["description"],
             "imageUrl": data["articles"][x]["urlToImage"],
         }
@@ -84,7 +153,7 @@ def chat(query, chatStr, prg=False):
 
     chatStr += response.choices[0].text + "\n"
     r = builtins.open(
-        "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "a"
+        c.data, "a"
     )
     r.write(f"Vivek:{query}\npixel:" + response.choices[0].text + "\n")
     r.close()

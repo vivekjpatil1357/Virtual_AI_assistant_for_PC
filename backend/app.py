@@ -7,19 +7,41 @@ import AppOpener as a
 import psutil
 import time
 import pyautogui as p
+import config as c
 
 app = Flask(__name__)
+
+@app.route("/roleplay", methods=["POST"])
+def sendRes():
+    print("hello i am in sendRes")
+    d = request.get_json()
+    print(d)
+    text = d["text"]
+    role = d["role"]
+    desc = d["desc"]
+    r = builtins.open(c.roleplay, "r")
+    chatStr = r.read()
+    r.close()
+    x = E.roleplay(
+        query=text,
+        role=role,
+        desc=desc,
+        chatStr=chatStr,
+    )
+    print(chatStr)
+    data = {
+        "response": x,
+        'role':role
+    }
+    # print("\n\n\\nn\n\n\n")
+    return jsonify(data)
 
 
 @app.route("/say", methods=["POST"])
 def say():
     d = request.get_json()
     I.say(d["text"])
-    return jsonify(
-        {
-            "h": "",
-        }
-    )
+    return jsonify(dict())
 
 
 @app.route("/brightness", methods=["POST"])
@@ -47,9 +69,7 @@ def volume():
 @app.route("/ai", methods=["POST"])
 def req():
     d = request.get_json()
-    r = builtins.open(
-        "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "r"
-    )
+    r = builtins.open(c.data, "r")
     chatStr = r.read()
     r.close()
     x = E.chat(
@@ -59,7 +79,6 @@ def req():
     data = {
         "response": x,
     }
-    # print("\n\n\\nn\n\n\n")
     return jsonify(data)
 
 
@@ -67,9 +86,7 @@ def req():
 @app.route("/start/chat", methods=["POST"])
 def chat():
     d = request.get_json()
-    r = builtins.open(
-        "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "r"
-    )
+    r = builtins.open(c.data, "r")
     chatStr = r.read()
     r.close()
     d = mainalgo("chat", d["text"])
@@ -78,9 +95,7 @@ def chat():
 
 @app.route("/start/voice")
 def voice():
-    r = builtins.open(
-        "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "r"
-    )
+    r = builtins.open(c.data, "r")
     chatStr = r.read()
     chatStr += "\n"
     r.close()
@@ -178,29 +193,29 @@ def mainalgo(source, text=""):
                     "imageUrl": x["imageUrl"],
                 }
                 return jsonify(data)
-            elif (
-                "adjust sound" in query.lower()
-                or "increase brightness" in query.lower()
-                or "decrease brightness" in query.lower()
+        
+            elif ("increase" in query.lower() or "decrease" in query.lower()) and (
+                "brightness" in query.lower()
             ):
                 if "increase" in query.lower():
-                    data = {"brightness": "10"}
+                    data = {"brightness": "20"}
                 elif "decrease" in query.lower():
-                    data = {"brightness": "-10"}
+                    data = {"brightness": "-20"}
                 else:
                     data = {"brightness": "adjustable"}
                 return jsonify(data)
-            elif (
-                "adjust sound" in query.lower()
-                or "increase sound" in query.lower()
-                or "decrease sound" in query.lower()
+            elif ("increase" in query.lower() or "decrease" in query.lower()) and (
+                "sound" in query.lower() or "volume" in query.lower()
             ):
+                print("increasing")
                 if "increase" in query.lower():
-                    data = {"sound": "10"}
+                    print("increasing")
+                    x = I.adjustVolume(20)
+                    data = {"response": x, "isExit": "No", "isAi": "no"}
                 elif "decrease" in query.lower():
-                    data = {"sound": "-10"}
-                else:
-                    data = {"sound": "adjustable"}
+                    x = I.adjustVolume(-20)
+
+                    data = {"response": x, "isExit": "No", "isAi": "no"}
                 return jsonify(data)
             else:
                 data = {"isExit": "No", "isAi": "yes", "query": query}
@@ -211,9 +226,7 @@ def mainalgo(source, text=""):
 
         data = {"query": query, "isExit": "Yes", "response": "exiting sir"}
 
-        r = builtins.open(
-            "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt", "w"
-        )
+        r = builtins.open(c.data, "w")
         r.write("")
         r.close()
         return jsonify(data)
@@ -288,32 +301,25 @@ def mainalgo(source, text=""):
                 "imageUrl": x["imageUrl"],
             }
             return jsonify(data)
-        elif (
-            "adjust sound" in query.lower()
-            or "increase brightness" in query.lower()
-            or "decrease brightness" in query.lower()
+        elif ("increase" in query.lower() or "decrease" in query.lower()) and (
+            "brightness" in query.lower()
         ):
             isOpened = False
             if "increase" in query.lower():
-                data = {"brightness": "10"}
+                x = I.adjustBrightness(20)
             elif "decrease" in query.lower():
-                data = {"brightness": "-10"}
-            else:
-                data = {"brightness": "adjustable"}
-            return jsonify(data)
-        elif (
-            "adjust sound" in query.lower()
-            or "increase sound" in query.lower()
-            or "decrease sound" in query.lower()
+                x = I.adjustBrightness(-20)
+
+        elif ("increase" in query.lower() or "decrease" in query.lower()) and (
+            "sound" in query.lower() or "volume" in query.lower()
         ):
             isOpened = False
             if "increase" in query.lower():
-                data = {"sound": "10"}
+                x = I.adjustVolume(20)
+
             elif "decrease" in query.lower():
-                data = {"sound": "-10"}
-            else:
-                data = {"sound": "adjustable"}
-            return jsonify(data)
+                x = I.adjustVolume(-20)
+
         else:
             isOpened = False
             data = {"isAi": "yes", "query": query}

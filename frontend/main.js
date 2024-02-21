@@ -38,7 +38,7 @@ function createVoiceWindow() {
 function createChatWindow() {
   chatWindow = new BrowserWindow({
     width: 445,
-    height: 710,
+    height: 740,
     x: 1050,
     y: 5,
     webPreferences: {
@@ -69,8 +69,8 @@ function createRolePlayWindow() {
 }
 function createInputRolePlayWindow() {
   inputRolePlayWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
+    width: 445,
+    height: 470,
     x: 1050,
     y: 5,
     webPreferences: {
@@ -212,7 +212,26 @@ async function fetchChatData(text) { //will cause to call mainLogic for chat mod
 // ###################################################################################################
 // Fetch Functions ^ above
 // ###################################################################################################
+ipcMain.on('roleplaySend', (e,data) => {
+  dataToSend = data
+  
+  fetch('http://127.0.0.1:1000/roleplay',{ 
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dataToSend),
+  }).then((r) => r.json())
+  .then((data) => {
+    rolePlayWindow.webContents.send('roleplayReceive', {
+      'response': data['response'],
+      'role': data['role']      
+    })
 
+  }).catch(error => {
+    console.log(error);
+  });
+})
 ipcMain.on('choiceVoice', () => { // in choice when choosed as Voice,will open voice page
   createVoiceWindow()
   choiceWindow.close()
@@ -244,12 +263,12 @@ ipcMain.on('choiceRolePlay', () => {    // in choice when choosed as Roleplay, w
   createInputRolePlayWindow()
   choiceWindow.close()
 })
-
 ipcMain.on('sendRole', (e, data) => {  
   inputRolePlayWindow.close()
   console.log(data)
   rolePlayWindow.webContents.send('receiveRole', {
-    'role': data
+    'role': data['role'],
+    'desc':data['desc']
   })
 })
 ipcMain.on('start', () => {       // when clicked on start on first page, it will redirect to second page

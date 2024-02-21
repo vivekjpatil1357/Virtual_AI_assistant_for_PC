@@ -1,2 +1,5 @@
 apikey="asst_ReRjj9wvtC6gPUV3F5KuP7yO"
 apiKey_weather = "WYTph3eXoej3kHFfxOROjA==KnkY47yZyLmtbREg"
+roleplay= "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\roleplay.txt"
+data= "C:\\Users\\vivek\\OneDrive\\Desktop\\prj\\backend\\data.txt"
+apikeyGoogle="AIzaSyDHWcJPoeAZ90toN38JJ--iE2foZ8n07Yk"

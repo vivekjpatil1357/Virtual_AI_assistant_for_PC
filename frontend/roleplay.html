@@ -182,7 +182,32 @@
     <script src="renderer.js"></script>
     <script>
         function back() {
-            window.chat.backFromChat();
+            window.roleplay.backFromRoleplay();
+        }
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            if (userInput.trim() !== '') {
+                addMessage('Vivek', userInput);
+                document.getElementById('user-input').value = '';
+                scrollToBottom();
+                res(userInput)
+            }
+        }
+        function res(query) {
+            window.roleplay.roleplaySend({'text':query,'role':window.role,'desc':window.desc});
+            scrollToBottom();
+        }
+
+        function addMessage(sender, message) {
+            var messageList = document.getElementById('message-list');
+            var newMessage = document.createElement('div');
+            newMessage.className = "user"
+            newMessage.style = "align-self:start;"
+            newMessage.align = 'left'
+            newMessage.innerHTML = '<strong>' + sender + ':</strong><p> ' + message + '</p>';
+            if (message.trim() != '')
+                messageList.appendChild(newMessage);
+            scrollToBottom()
         }
 
         function scrollToBottom() {

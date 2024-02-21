@@ -20,7 +20,9 @@ contextBridge.exposeInMainWorld('chat', {
     receivePixelResponse: (callback) => ipcRenderer.on('response', callback),
     backFromChat:()=>ipcRenderer.send('backFromChat')
 })
-contextBridge.exposeInMainWorld('rolePlay', {
+contextBridge.exposeInMainWorld('roleplay', {
     sendRole: (data) => ipcRenderer.send('sendRole', data),
-    receiveRole:(callback)=>ipcRenderer.on('receiveRole',callback)
+    receiveRole:(callback)=>ipcRenderer.on('receiveRole',callback),
+    roleplaySend:(data)=>ipcRenderer.send('roleplaySend',data),
+    roleplayReceive:(callback)=>ipcRenderer.on('roleplayReceive',callback)
 })

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+    <input type="text" id="role" required onload="focus()">
+    <textarea  id="desc" cols="20" rows="3" onkeyup="handleKeyPress(event)" placeholder="Give Short discription here...."></textarea>
+    <button onclick="sendRole()">Select Role</button>
+</form>
+
+</body>
+<script>
+    function sendRole(){
+        var role=document.getElementById('role').value
+        var desc=document.getElementById('desc').value
+        window.roleplay.sendRole({'role':role,'desc':desc})
+    }
+    function handleKeyPress(event){
+        var role=document.getElementById('role').value
+                sendMessage();
+        }
+</script>
+</html>
